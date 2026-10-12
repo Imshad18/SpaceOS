@@ -1,5 +1,7 @@
 # Space OS
 
+**[Download SpaceOS.apk](../../raw/main/SpaceOS.apk)** — install directly, no Play Store.
+
 A science-fiction Android home screen. Replaces the launcher entirely: app
 lattice, lock screen with biometric unlock, notification handling, contacts,
 dialer, a signal seeker that plots Wi-Fi and Bluetooth strength on a compass,
