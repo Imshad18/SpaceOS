@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SpaceOS" parent="@android:style/Theme.Material.NoActionBar">
+        <!-- A fixed colour here paints a band wherever the content view does
+             not reach, and on a light palette that band is black. Skin
+             .dressWindow() overrides both at runtime from the active
+             palette; these are only the pre-first-frame values. -->
+        <item name="android:windowBackground">#FF000509</item>
+        <item name="android:colorBackground">#FF000509</item>
+        <item name="android:statusBarColor">#00000000</item>
+        <item name="android:navigationBarColor">#00000000</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:textColor">#FF7CF5FF</item>
+        <item name="android:windowShowWallpaper">false</item>
+    </style>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    HANDS :: the accessibility bridge.
+
+    canRetrieveWindowContent  — read what is on screen in any app
+    canPerformGestures        — dispatch real taps and swipes
+
+    flagRequestFilterKeyEvents is deliberately NOT set. Space OS never needs to
+    intercept keystrokes, and requesting it would be pure overreach.
+-->
+<accessibility-service
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeWindowStateChanged|typeWindowContentChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagReportViewIds|flagRetrieveInteractiveWindows|flagIncludeNotImportantViews"
+    android:canRetrieveWindowContent="true"
+    android:canPerformGestures="true"
+    android:notificationTimeout="200"
+    android:description="@string/hands_description" />

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Module arriving: punches in from slightly behind the glass. -->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shareInterpolator="false">
+    <alpha
+        android:fromAlpha="0.0" android:toAlpha="1.0"
+        android:duration="140"
+        android:interpolator="@android:interpolator/decelerate_quad" />
+    <scale
+        android:fromXScale="0.90" android:toXScale="1.0"
+        android:fromYScale="0.90" android:toYScale="1.0"
+        android:pivotX="50%p" android:pivotY="50%p"
+        android:duration="220"
+        android:interpolator="@android:interpolator/fast_out_slow_in" />
+</set>

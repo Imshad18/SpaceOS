@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Bridge returning as a module is dismissed. -->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shareInterpolator="false">
+    <alpha
+        android:fromAlpha="0.0" android:toAlpha="1.0"
+        android:duration="150"
+        android:interpolator="@android:interpolator/decelerate_quad" />
+    <scale
+        android:fromXScale="1.06" android:toXScale="1.0"
+        android:fromYScale="1.06" android:toYScale="1.0"
+        android:pivotX="50%p" android:pivotY="50%p"
+        android:duration="220"
+        android:interpolator="@android:interpolator/fast_out_slow_in" />
+</set>

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.spaceos.os"
+    android:versionCode="2"
+    android:versionName="1.1.0">
+
+    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="34" />
+
+    <!--
+        Every permission below is exercised by code in this APK. Anything not
+        actually called has been removed: an unused permission buys nothing and
+        makes the app read as spyware to Play Protect's heuristics.
+
+        Deliberately NOT declared:
+          CAMERA          — setTorchMode() needs no permission
+          FLASHLIGHT      — deprecated no-op since API 21
+          READ_PHONE_*    — TelephonyManager is never touched
+          BLUETOOTH/NFC   — no radio code at all
+          WAKE_LOCK       — nothing is held awake
+          POST_NOTIFICATIONS — the app posts no notifications
+          PACKAGE_USAGE_STATS — signature-level; declaring it is pure noise
+          WRITE_EXTERNAL_STORAGE — nothing is written to shared storage
+    -->
+
+    <!-- Telemetry: uplink panel and the network tool. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- Neural link only. Unused until you configure a provider. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- NAV panel. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- SCOPE :: Bluetooth sweep. Android classes nearby radios as location
+         data, so the scan needs location too. -->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+
+    <!-- ARCHIVE and OPTICS panels. -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+
+    <!--
+        PLAY STORE BLOCKER: "All files access" is restricted to file managers,
+        antivirus and backup apps. Requesting it as a launcher will fail review.
+        Remove this line before any Play submission; the archive panel degrades
+        to scoped storage and still lists media directories.
+    -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+
+    <!-- COMMS panel. -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <!--
+        PLAY STORE BLOCKER: SMS and call log are restricted to the app the user
+        has set as their default dialer or messaging app. A launcher does not
+        qualify and the Permissions Declaration will be rejected. Remove both
+        before submission — the COMMS panel already degrades gracefully.
+    -->
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+
+    <!-- Voice interface. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- Launchers are an approved use case; still needs a Play declaration. -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Floating island: an overlay window that survives leaving the app, and
+         the foreground service that keeps it alive. -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <!-- Required alongside foregroundServiceType="microphone" on Android 14+. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Long autonomous agent runs die the moment the CPU sleeps. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Lock screen face. -->
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+
+    <!-- Touchless gesture control reads the front camera. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
+
+    <!-- Fingerprint / face on the lock face. Authenticates you to Space OS;
+         it cannot and does not unlock the device by itself. -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
+    <!-- Pull down the notification shade without the accessibility service.
+         A normal permission, granted at install; no prompt, no settings trip. -->
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+
+    <uses-feature android:name="android.hardware.camera.flash" android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="false" />
+    <uses-feature android:name="android.hardware.microphone" android:required="false" />
+
+    <application
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:theme="@style/SpaceOS"
+        android:hardwareAccelerated="true"
+        android:requestLegacyExternalStorage="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="false">
+
+        <!-- BRIDGE :: primary shell, registered as HOME. -->
+        <activity
+            android:name=".Bridge"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:stateNotNeeded="true"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout|uiMode|density"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".Module"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout|uiMode|density"
+            android:parentActivityName=".Bridge" />
+
+        <activity
+            android:name=".Terminal"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout|uiMode|density"
+            android:parentActivityName=".Bridge" />
+
+        <!-- SCOPE :: signal seeker, compass + RSSI plot. -->
+        <activity
+            android:name=".Scope"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout|uiMode|density"
+            android:parentActivityName=".Bridge" />
+
+        <!-- NEURAL :: LLM setup and agent console. -->
+        <activity
+            android:name=".Neural"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout|uiMode|density"
+            android:parentActivityName=".Bridge" />
+
+        <!--
+            LOCK :: the Space OS face shown over the keyguard. It does NOT
+            replace Android's secure lock — your PIN and biometrics are
+            untouched. Swiping up asks the system to run its own unlock.
+        -->
+        <activity
+            android:name=".Lock"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:excludeFromRecents="true"
+            android:showOnLockScreen="true"
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.spaceos.os.lock"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout|uiMode|density"
+            android:theme="@style/SpaceOS" />
+
+        <!--
+            ISLAND :: floating overlay, available on top of every app.
+
+            The foregroundServiceType MUST include microphone. Since Android 11
+            a foreground service can only reach the mic while the app is in the
+            background if it declares that type — and "in the background" is
+            precisely when this service is needed, because the whole point is
+            talking to it from inside Instagram or Facebook. Declaring only
+            specialUse meant the recogniser was silently denied audio the
+            moment another app came to the front, so nothing was ever heard
+            unless the user tapped while Space OS itself was on screen.
+
+            camera is here for touchless scroll, which reads the front camera
+            from the same service.
+        -->
+        <service
+            android:name=".Island"
+            android:exported="false"
+            android:foregroundServiceType="microphone|camera|specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Floating assistant overlay controlled by the user" />
+        </service>
+
+        <!--
+            EARS :: notification feed.
+
+            Android does not expose the status bar to apps, so Space OS cannot
+            mirror it. This subscribes to the same stream the status bar is
+            built from, which is the only supported route, and needs the user's
+            explicit "Notification access" grant.
+        -->
+        <service
+            android:name=".Ears"
+            android:exported="true"
+            android:label="Space OS Notifications"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <!--
+            HANDS :: accessibility bridge. Dormant until the user enables it in
+            Settings > Accessibility, and revocable there at any time.
+
+            PLAY STORE: an accessibility service must have a declared
+            accessibility purpose, and Play scrutinises this heavily. Using it
+            for general automation rather than assisting users with
+            disabilities will not pass review.
+        -->
+        <service
+            android:name=".Hands"
+            android:exported="true"
+            android:label="Space OS Hands"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_config" />
+        </service>
+
+    </application>
+</manifest>

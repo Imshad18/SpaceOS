@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Space OS</string>
+    <string name="hands_description">Lets the Space OS assistant see what is on screen and operate your phone for you — tapping, swiping, typing and navigating inside any app. Only active while you have it enabled here.</string>
+</resources>
